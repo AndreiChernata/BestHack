@@ -7,39 +7,61 @@ public class PlayerHandler : MonoBehaviour {
     public float speed;
     private float mousedeltaX;
     private float mousedeltaY;
-   // private Vector2 prevmousepos;
-
+    // private Vector2 prevmousepos;
+    private float boost = 1f;
     public Transform _camera;
     public float speedX;
     public float speedY;
+    private float reload = 1 / 5f;
+    
+
+    public GameObject pulya;
+
 
 	// Use this for initialization
 	void Start () {
-        //prevmousepos = Input.mousePosition;
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-	
-	// Update is called once per frame
-	void Update () {
+   
+    // Update is called once per frame
+    void Update () {
+        if (reload > 0) reload -= Time.deltaTime;
+        boost = (Input.GetKey(KeyCode.LeftShift)) ?
+            1.5f : 1f;
 	    if(Input.GetKey(KeyCode.W))
         {
-            transform.position += transform.forward.normalized * Time.deltaTime;
+            
+            transform.position += transform.forward.normalized * Time.deltaTime * speed * boost;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            transform.position += transform.right.normalized * Time.deltaTime;
+            transform.position += transform.right.normalized * Time.deltaTime * speed *0.6f;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            transform.position += -transform.right.normalized * Time.deltaTime;
+            transform.position += -transform.right.normalized * Time.deltaTime* speed * 0.6f;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            transform.position += -transform.forward.normalized * Time.deltaTime;
+            transform.position += -transform.forward.normalized * Time.deltaTime *speed * 0.8f;
+        }
+        if(Input.GetMouseButton(0))
+        {
+            Shoot();
         }
         MouseLook();
     }
+
+    private void Shoot()
+    {
+        if(reload <= 0)
+        {
+            Instantiate(pulya, _camera.position, _camera.rotation);
+            reload = 1 / 5f;
+        }
+    }
+
     private void MouseLook()
     {
         mousedeltaX = Input.GetAxis("Mouse X");
