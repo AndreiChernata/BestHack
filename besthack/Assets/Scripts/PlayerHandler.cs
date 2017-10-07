@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 public class PlayerHandler : MonoBehaviour {
 
-
+    public float healthpoints;
     public float speed;
     private float mousedeltaX;
     private float mousedeltaY;
@@ -13,8 +13,8 @@ public class PlayerHandler : MonoBehaviour {
     public float speedX;
     public float speedY;
     private float reload = 1 / 5f;
-    
 
+    private Text hpBar;
     public GameObject pulya;
 
 
@@ -22,10 +22,13 @@ public class PlayerHandler : MonoBehaviour {
 	void Start () {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        healthpoints = 3f;
+        hpBar = GameObject.Find("hpBar").GetComponent<Text>();
     }
    
     // Update is called once per frame
     void Update () {
+        hpBar.text = "" + (int)healthpoints;
         if (reload > 0) reload -= Time.deltaTime;
         boost = (Input.GetKey(KeyCode.LeftShift)) ?
             1.5f : 1f;
@@ -57,6 +60,21 @@ public class PlayerHandler : MonoBehaviour {
     {
         if(reload <= 0)
         {
+            Ray _ray = new Ray(_camera.position, _camera.forward);
+            RaycastHit _hit;
+            if (Physics.Raycast(_ray, out _hit, 200f))
+            {
+                if(_hit.transform.tag == "enemy" && GetComponent<Task>().task2.activeSelf == true)
+                {
+                    Destroy(_hit.transform.gameObject);
+                    GetComponent<Task>().KilledEnemy();
+                }
+                else if (_hit.transform.tag == "enemy" && GetComponent<Task>().task4.activeSelf == true)
+                {
+                    Destroy(_hit.transform.gameObject);
+                    GetComponent<Task>().KilledEnemy();
+                }
+            }
             Instantiate(pulya, _camera.position, _camera.rotation);
             reload = 1 / 5f;
         }
@@ -65,7 +83,7 @@ public class PlayerHandler : MonoBehaviour {
     private void MouseLook()
     {
         mousedeltaX = Input.GetAxis("Mouse X");
-        mousedeltaY = Input.GetAxis("Mouse Y");
+        mousedeltaY = -Input.GetAxis("Mouse Y");
         float tempX = 0;
         transform.Rotate(new Vector3(0, mousedeltaX*speedX, 0));
         tempX = _camera.rotation.eulerAngles.x;

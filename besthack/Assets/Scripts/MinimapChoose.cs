@@ -81,9 +81,11 @@ public class MinimapChoose : MonoBehaviour {
                 }
                 else if (Input.GetMouseButtonUp(0) && from != null && _hit.transform.gameObject != from && !relsing && _hit.transform.gameObject.GetComponent<AreaController>().koala == false)
                 {
+                    to = _hit.transform.gameObject;
+                    Debug.Log(int.Parse(from.name) + int.Parse(to.name));
                     if (relses[int.Parse(from.name), int.Parse(to.name)] == false)
                     {
-                        to = _hit.transform.gameObject;
+                        
                         relsing = true;
                         ShowPrice();
                     }
