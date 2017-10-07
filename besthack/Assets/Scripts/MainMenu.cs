@@ -32,7 +32,8 @@ public class MainMenu : MonoBehaviour {
 	}
     public void loadGame()
     {
-        SceneManager.LoadScene(1);
+        PlayerPrefs.SetInt("scenetoload", 2);
+        SceneManager.LoadScene(0);
     }
     public void quitGame()
     {
