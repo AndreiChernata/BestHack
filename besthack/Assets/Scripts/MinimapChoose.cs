@@ -35,22 +35,33 @@ public class MinimapChoose : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        if(PlayerPrefs.GetInt("raidingnum") != 0 && PlayerPrefs.GetInt("winlast") == 1)
+        {
+            GameObject.Find(""+PlayerPrefs.GetInt("raidingnum")).GetComponent<AreaController>().koala = true;
+        }
+        if (!PlayerPrefs.HasKey("koala")) PlayerPrefs.SetString("koala", "000000000000");
         relsing = false;
         buy_rels = false;
         make_raid = false;
         raiding = false;
         money = 300;
-        _money.text = "Печива на складі: " + money;
+        _money.text = "" +money;
         LoadRelses();
         loading = false;
         
-        //PlayerPrefs.GetInt("money");
+        money = PlayerPrefs.GetInt("money");
+        for(int i = 1;i<13;i++)
+        {
+            GameObject.Find("" + i).GetComponent<AreaController>().afterStart();
+        }
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (timers < 0f)
         {
+            PlayerPrefs.SetInt("money", money);
+            
             PlayerPrefs.SetInt("scenetoload", 3);
             SceneManager.LoadScene(0);
         }
@@ -136,7 +147,7 @@ public class MinimapChoose : MonoBehaviour {
         {
             
             _price = (int)(Vector3.Distance(from.transform.position, to.transform.position) * 100);
-            price.text = "This will cost you: " + (int)(Vector3.Distance(from.transform.position, to.transform.position) * 100);
+            price.text = "Це буде вартувати: " + (int)(Vector3.Distance(from.transform.position, to.transform.position) * 100);
             showUI.SetActive(true);
         }
         else if(raiding)
@@ -163,7 +174,7 @@ public class MinimapChoose : MonoBehaviour {
             from = null;
             showUI.SetActive(false);
             relsing = false;
-            _money.text = "Печива на складі: " + money;
+            _money.text = "" + money;
             _price = 0;
             //Instantiate(, temp_rels, Quaternion.Euler(0, Vector3.Angle(temp_rels * 2, transform.right),0));
             buy_rels = false;
@@ -175,6 +186,7 @@ public class MinimapChoose : MonoBehaviour {
         {
             if(relses[int.Parse(from.name), int.Parse(to.name)] == true)
             {
+                PlayerPrefs.SetInt("raidingnum", int.Parse(to.name));
                 load_blur = (from.transform.position + to.transform.position) / 2;
                 loading = true;
                 SaveRelses();
@@ -211,6 +223,11 @@ public class MinimapChoose : MonoBehaviour {
                 relses[int.Parse(one_rels[0]), int.Parse(one_rels[1])] = true;
             }
         }
+        temp = PlayerPrefs.GetString("koala");
+        for (int i = 1; i < 13; i++)
+        {
+            if (temp[i - 1] == '1') GameObject.Find("" + i).GetComponent<AreaController>().koala = true;
+        }
     }
     private void SaveRelses()
     {
@@ -223,6 +240,14 @@ public class MinimapChoose : MonoBehaviour {
                 else temp += i + "," + j + ",0;";
             }
         PlayerPrefs.SetString("relses", temp);
+        temp = "";
+        for(int i=1;i<13;i++)
+        {
+            if (GameObject.Find("" + i).GetComponent<AreaController>().koala) temp += "1";
+            else temp += "0";
+        }
+        PlayerPrefs.SetString("koala", temp);
+        
     }
     public void Buy()
     {

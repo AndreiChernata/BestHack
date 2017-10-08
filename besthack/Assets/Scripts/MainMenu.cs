@@ -8,6 +8,8 @@ public class MainMenu : MonoBehaviour {
     private Vector3 destination;
     public Transform dest;
     private Vector3 from;
+    public GameObject Option;
+
     private float progress = 0;
 	// Use this for initialization
 	void Start () {
@@ -38,5 +40,14 @@ public class MainMenu : MonoBehaviour {
     public void quitGame()
     {
         Application.Quit();
+    }
+    public void ShowOption()
+    {
+        Option.SetActive(true);
+    }
+    public void HideOption(int glass_index)
+    {
+        PlayerPrefs.SetInt("glass_type", glass_index);
+        Option.SetActive(false);
     }
 }

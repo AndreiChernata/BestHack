@@ -23,6 +23,9 @@ public class Enemy : MonoBehaviour {
     private float rate = 1F;
     private float nextFire = 0F;
 
+    public AudioClip[] audio = new AudioClip[4];
+
+    private AudioSource a_player;
     private bool visible;
     private bool flag = true;
     void Start () {
@@ -31,7 +34,8 @@ public class Enemy : MonoBehaviour {
         second = secondPoint.transform.position;
         moveVector = first;
         player = GameObject.FindGameObjectWithTag("Player");
-	}
+        a_player = Camera.main.GetComponent<AudioSource>();
+    }
 
 
     private void FixedUpdate()
@@ -96,7 +100,14 @@ public class Enemy : MonoBehaviour {
             }
         }
     }
-
+    private void OnDestroy()
+    {
+        if (Random.value > 0.5f)
+        {
+            //if(a_player != null) if (!a_player.isPlaying) a_player.PlayOneShot(audio[1]);
+            
+        }
+    }
     private void IsVisible()
     {
 
@@ -111,7 +122,15 @@ public class Enemy : MonoBehaviour {
             if (Physics.Raycast(ray, out hit, 20f))
             {
 
-                if (hit.collider.gameObject.tag == "Player") { if (nextFire == 0) nextFire = Time.time + 1f; visible = true; }
+                if (hit.collider.gameObject.tag == "Player")
+                {
+                    if (nextFire == 0) nextFire = Time.time + 1f;
+                    if (Random.value > 0.5f && flag)
+                    {
+                        if(a_player.isPlaying) a_player.PlayOneShot(audio[0]);
+                    }
+                    visible = true;
+                }
                 else
                 {
 

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Task : MonoBehaviour {
 
@@ -41,7 +42,7 @@ public class Task : MonoBehaviour {
         {
             if(task3.activeSelf)
             {
-                if(Vector3.Distance(Box.transform.position, transform.position) < 2f && !holdingBox)
+                if(Vector3.Distance(Box.transform.position, transform.position) < 4f && !holdingBox)
                 {
                     holdingBox = true;
                     holdBox = Instantiate(createBox, transform.forward / 2 + transform.position, transform.rotation);
@@ -49,7 +50,7 @@ public class Task : MonoBehaviour {
                     
                     holdBox.transform.parent = transform;
                 }
-                if (Vector3.Distance(train.transform.position, transform.position) < 2f && holdingBox)
+                if (Vector3.Distance(train.transform.position, transform.position) < 4f && holdingBox)
                 {
                     Destroy(holdBox);
                     holdingBox = false;
@@ -57,10 +58,22 @@ public class Task : MonoBehaviour {
                 }
             }
         }
+        if(GetComponent<PlayerHandler>().healthpoints <= 0f)
+        {
+            PlayerPrefs.SetInt("winlast", 0);
+            PlayerPrefs.SetInt("cookies_last", 0);
+            time -= Time.deltaTime;
+            int _n = (int)time;
+            if (_n - _n / 60 * 60 > 9)
+                PlayerPrefs.SetString("timelast", (_n / 60 + ":" + (_n - _n / 60 * 60)));
+            else
+                PlayerPrefs.SetString("timelast", (_n / 60 + ":0" + (_n - _n / 60 * 60)));
+            SceneManager.LoadScene(4);
+        }
 	    if(EnemyKills == 0)
         {
             task3.SetActive(true);
-            task3.GetComponent<Text>().text = "Забрати " + ShipBox + " ящиків і донести до метро.";
+            task3.GetComponent<Text>().text = "Забрати " + ShipBox + " ящиків з печивом і донести до метро.";
         }
         if(ShipBox == 0)
         {
@@ -76,13 +89,35 @@ public class Task : MonoBehaviour {
         }
         if(phase_4 && defenseKill == 0)
         {
-            Debug.Log("Finished");
+            PlayerPrefs.SetInt("winlast", 1);
+            PlayerPrefs.SetInt("cookies_last", 200);
+            time -= Time.deltaTime;
+            int _n = (int)time;
+            if (_n - _n / 60 * 60 > 9)
+                PlayerPrefs.SetString("timelast", (_n / 60 + ":" + (_n - _n / 60 * 60)));
+            else
+                PlayerPrefs.SetString("timelast", (_n / 60 + ":0" + (_n - _n / 60 * 60)));
+            SceneManager.LoadScene(4);
         }
-        //time -= Time.deltaTime;
-        //int timeI = (int)time;
-       // string s = string.Format("{0}", (time - (timeI * 60)));
-        //text.text = (timeI % 60).ToString() + ":" + s;
-	}
+        time -= Time.deltaTime;
+        int n = (int)time;
+        if (n > 0)
+        {
+            if (n - n / 60 * 60 > 9)
+                text.text =(n / 60 + ":" + (n - n / 60 * 60));
+            else
+                text.text = (n / 60 + ":0" + (n - n / 60 * 60));
+        }
+        else
+        {
+            text.text = ("0:00");
+            PlayerPrefs.SetInt("winlast", 0);
+            PlayerPrefs.SetInt("cookies_last", 0);
+            PlayerPrefs.SetString("timelast", "0:00");
+            SceneManager.LoadScene(4);
+        }
+            
+    }
     private void SpawnEnemies()
     {
         Instantiate(enemy, new Vector3(transform.position.x + ( (Random.value * 2 -1 )*(Random.value * 5+5)), transform.position.y, transform.position.z + (Random.value * 2 - 1) * (Random.value * 5 + 5)), new Quaternion());
