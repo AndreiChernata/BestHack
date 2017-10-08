@@ -23,7 +23,7 @@ public class Task : MonoBehaviour {
 
     private bool holdingBox;
     public Text text;
-    private float time = 3600F;
+    private float time = 300F;
 
     private bool phase_4;
     private int countwaves =0 ;
@@ -120,8 +120,12 @@ public class Task : MonoBehaviour {
     }
     private void SpawnEnemies()
     {
-        Instantiate(enemy, new Vector3(transform.position.x + ( (Random.value * 2 -1 )*(Random.value * 5+5)), transform.position.y, transform.position.z + (Random.value * 2 - 1) * (Random.value * 5 + 5)), new Quaternion());
-        Instantiate(enemy, new Vector3(transform.position.x + ((Random.value * 2 - 1) * (Random.value * 5 + 5)), transform.position.y, transform.position.z + (Random.value * 2 - 1) * (Random.value * 5 + 5)), new Quaternion());
+        GameObject temp;
+        temp = Instantiate(enemy, new Vector3(transform.position.x + ( (Random.value * 2 -1 )*(Random.value * 5+5)), transform.position.y, transform.position.z + (Random.value * 2 - 1) * (Random.value * 5 + 5)), new Quaternion());
+        temp.transform.LookAt(transform);
+        GameObject tempF;
+        tempF = Instantiate(enemy, new Vector3(transform.position.x + ((Random.value * 2 - 1) * (Random.value * 5 + 5)), transform.position.y, transform.position.z + (Random.value * 2 - 1) * (Random.value * 5 + 5)), new Quaternion());
+        tempF.transform.LookAt(transform);
     }
     private void OnTriggerEnter(Collider col)
     {

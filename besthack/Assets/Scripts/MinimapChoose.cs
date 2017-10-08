@@ -40,20 +40,21 @@ public class MinimapChoose : MonoBehaviour {
             GameObject.Find(""+PlayerPrefs.GetInt("raidingnum")).GetComponent<AreaController>().koala = true;
         }
         if (!PlayerPrefs.HasKey("koala")) PlayerPrefs.SetString("koala", "000000000000");
+        if (!PlayerPrefs.HasKey("money")) PlayerPrefs.SetInt("money", 300);
+       
         relsing = false;
         buy_rels = false;
         make_raid = false;
         raiding = false;
-        money = 300;
-        _money.text = "" +money;
+        money = PlayerPrefs.GetInt("money");
+        _money.text = "" + money; ;
         LoadRelses();
         loading = false;
-        
-        money = PlayerPrefs.GetInt("money");
         for(int i = 1;i<13;i++)
         {
             GameObject.Find("" + i).GetComponent<AreaController>().afterStart();
         }
+        if (!PlayerPrefs.HasKey("relses")) SaveRelses();
     }
 	
 	// Update is called once per frame
@@ -167,8 +168,8 @@ public class MinimapChoose : MonoBehaviour {
             Vector3 temp_rels = (from.transform.position + to.transform.position) / 2;
             GameObject temp_obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
             temp_obj.transform.position = temp_rels;
-            if (from.transform.position.x > to.transform.position.x) temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(temp_rels * 2, transform.right), 0);
-            else temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(temp_rels * 2, -transform.right), 0);
+            if (from.transform.position.x > to.transform.position.x) temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(to.transform.position - from.transform.position, transform.right), 0);
+            else temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(to.transform.position - from.transform.position, transform.right), 0);
             temp_obj.transform.localScale = new Vector3(Vector3.Distance(from.transform.position, to.transform.position), 0.01f, 0.1f);
             to = null;
             from = null;
@@ -217,8 +218,8 @@ public class MinimapChoose : MonoBehaviour {
                 Vector3 temp_rels = (tempf.transform.position + tempt.transform.position) / 2 + new Vector3(0, 0.2f, 0);
                 GameObject temp_obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 temp_obj.transform.position = temp_rels;
-                if (tempf.transform.position.x > tempt.transform.position.x) temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(temp_rels * 2, transform.right), 0);
-                else temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(temp_rels * 2, -transform.right), 0);
+                if (tempf.transform.position.x > tempt.transform.position.x) temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(tempt.transform.position - tempf.transform.position, transform.right), 0);
+                else temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(tempt.transform.position - tempf.transform.position, transform.right), 0);
                 temp_obj.transform.localScale = new Vector3(Vector3.Distance(tempf.transform.position, tempt.transform.position), 0.01f, 0.1f);
                 relses[int.Parse(one_rels[0]), int.Parse(one_rels[1])] = true;
             }
@@ -288,4 +289,5 @@ public class MinimapChoose : MonoBehaviour {
             make_raid = false;
         }
     }
+    
 }

@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour {
     private float rate = 1F;
     private float nextFire = 0F;
 
-    public AudioClip[] audio = new AudioClip[4];
+    public new AudioClip[] audio = new AudioClip[4];
 
     private AudioSource a_player;
     private bool visible;
@@ -119,10 +119,11 @@ public class Enemy : MonoBehaviour {
 
             Ray ray = new Ray(position, raydirection - position);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 20f))
+            if (Physics.Raycast(ray, out hit, 30f))
             {
 
-                if (hit.collider.gameObject.tag == "Player")
+                if (hit.collider.gameObject.tag == "Player" ||
+        Vector3.Distance(transform.position, player.transform.position) <= 4F)
                 {
                     if (nextFire == 0) nextFire = Time.time + 1f;
                     if (Random.value > 0.5f && flag)

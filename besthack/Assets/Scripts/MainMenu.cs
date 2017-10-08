@@ -50,4 +50,9 @@ public class MainMenu : MonoBehaviour {
         PlayerPrefs.SetInt("glass_type", glass_index);
         Option.SetActive(false);
     }
+
+    public void Clear()
+    {
+        PlayerPrefs.DeleteAll();
+    }
 }
