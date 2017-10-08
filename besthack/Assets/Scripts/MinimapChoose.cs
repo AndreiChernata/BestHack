@@ -168,8 +168,8 @@ public class MinimapChoose : MonoBehaviour {
             Vector3 temp_rels = (from.transform.position + to.transform.position) / 2;
             GameObject temp_obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
             temp_obj.transform.position = temp_rels;
-            if (from.transform.position.x > to.transform.position.x) temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(to.transform.position - from.transform.position, transform.right), 0);
-            else temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(to.transform.position - from.transform.position, transform.right), 0);
+            if (from.transform.position.z > to.transform.position.z) temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(to.transform.position - from.transform.position, transform.right), 0);
+            else temp_obj.transform.rotation = Quaternion.Euler(0, 180 - Vector3.Angle(to.transform.position - from.transform.position, transform.right), 0);
             temp_obj.transform.localScale = new Vector3(Vector3.Distance(from.transform.position, to.transform.position), 0.01f, 0.1f);
             to = null;
             from = null;
@@ -218,8 +218,8 @@ public class MinimapChoose : MonoBehaviour {
                 Vector3 temp_rels = (tempf.transform.position + tempt.transform.position) / 2 + new Vector3(0, 0.2f, 0);
                 GameObject temp_obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 temp_obj.transform.position = temp_rels;
-                if (tempf.transform.position.x > tempt.transform.position.x) temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(tempt.transform.position - tempf.transform.position, transform.right), 0);
-                else temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(tempt.transform.position - tempf.transform.position, transform.right), 0);
+                if (tempf.transform.position.z > tempt.transform.position.z) temp_obj.transform.rotation = Quaternion.Euler(0, Vector3.Angle(tempt.transform.position - tempf.transform.position, transform.right), 0);
+                else temp_obj.transform.rotation = Quaternion.Euler(0, 180 - Vector3.Angle(tempt.transform.position - tempf.transform.position, transform.right), 0);
                 temp_obj.transform.localScale = new Vector3(Vector3.Distance(tempf.transform.position, tempt.transform.position), 0.01f, 0.1f);
                 relses[int.Parse(one_rels[0]), int.Parse(one_rels[1])] = true;
             }
